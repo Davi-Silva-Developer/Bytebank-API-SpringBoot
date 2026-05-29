@@ -33,7 +33,7 @@ public class ContaController {
 
 
     @PostMapping
-    public String abrir(@RequestBody AbrirContaRequest dados) {
+    public String abrir(@RequestBody @Valid AbrirContaRequest dados) {
         //Procurando titular no banco de dados
         Cliente titular = clienteRepository.findById(dados.clienteId()).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
@@ -41,7 +41,6 @@ public class ContaController {
         Conta novaConta;
         if (dados.tipoDeConta().equalsIgnoreCase("CC")) {
             novaConta = new ContaCorrente(titular, dados.numero(), dados.saldoInicial());
-
 
         } else {
             novaConta = new ContaPoupanca(titular, dados.numero(), dados.saldoInicial());
@@ -56,43 +55,27 @@ public class ContaController {
 
     @PutMapping("/{id}/depositar")
     public ResponseEntity<String> depositar(@PathVariable Long id, @RequestBody @Valid TransacaoRequest dados) {
-        try {
+
             contaService.depositar(id, dados.valor());
             return ResponseEntity.ok("Depósito realizado com sucesso!!");
 
-
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
 
 
     @PutMapping("/{id}/sacar")
     public ResponseEntity<String> sacar(@PathVariable Long id, @RequestBody @Valid TransacaoRequest dados) {
 
-        try {
             contaService.sacar(id, dados.valor());
             return ResponseEntity.ok("Saque realizado com sucesso.");
 
-
-        } catch (IllegalArgumentException e ) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
     }
+
 
     @PutMapping("/{id}/transferir")
     public ResponseEntity<String> tranferir(@PathVariable Long id, @RequestBody @Valid TransferenciaRequest dados){
 
-        try{
             contaService.transferir(id, dados.contaDestinoId(), dados.valor());
             return ResponseEntity.ok("Valor transferido com sucesso!");
-
-
-        }catch(IllegalArgumentException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
-
-
 
     }
 }
