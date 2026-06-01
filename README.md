@@ -13,14 +13,14 @@ Este projeto representa a evolução de um sistema bancário em Java puro para u
 
 A arquitetura foi desenhada para isolar regras de negócio na camada de `Service`, proteger a entrada de dados com o padrão `DTO` (Data Transfer Object) e garantir a integridade da base de dados com o PostgreSQL usando `JPA/Hibernate`.
 
-## ⚙️ Funcionalidades
+##  Funcionalidades
 
 - **Gestão de Contas:** Abertura de Contas Corrente e Poupança utilizando herança no mapeamento relacional (`@Inheritance(strategy = SINGLE_TABLE)`).
 - **Operações Financeiras:** Depósitos e Saques com aplicação de regras de negócio (ex: taxas exclusivas para Conta Corrente).
 - **Transferências:** Envio de valores entre contas com rollback automático em caso de falha (`@Transactional`).
 - **Validação de Dados:** Filtro rigoroso nas requisições HTTP utilizando Bean Validation (`@NotNull`, `@Positive`) nos DTOs (Records).
 
-## 🛠️ Tecnologias e Padrões Utilizados
+##  Tecnologias e Padrões Utilizados
 
 - **Linguagem:** Java 21
 - **Framework:** Spring Boot (Web, Data JPA, Validation)
@@ -59,7 +59,7 @@ Este projeto está em desenvolvimento contínuo, seguindo um roadmap estruturado
 
 [x] Fase 1: Base Profissional (Spring Boot, JPA, Arquitetura MVC, DTOs e Bean Validation).
 
-[ ] Fase 2: Tratamento de Erros e Documentação (Implementação de @ControllerAdvice para erros padronizados e Swagger/OpenAPI para documentação interativa).
+[x] Fase 2: Tratamento de Erros e Documentação (Implementação de @ControllerAdvice para erros padronizados e Swagger/OpenAPI para documentação interativa).
 
 [ ] Fase 3: Qualidade de Código (Cobertura de testes automatizados unitários e de integração com JUnit e Mockito).
 
