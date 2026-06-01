@@ -50,12 +50,12 @@ Atualiza o ficheiro src/main/resources/application.properties com as tuas creden
 
 Properties
 - spring.datasource.url=jdbc:postgresql://localhost:5432/bytebank_db
-- spring.datasource.username=TEU_USUARIO
-- spring.datasource.password=TUA_SENHA
+- spring.datasource.username=SEU_USUARIO
+- spring.datasource.password=SUA_SENHA
 - Executa a aplicação através da tua IDE (IntelliJ/Eclipse) ou via Maven. O servidor iniciará na porta 8080.
 
-🗺️ Roadmap de Evolução (Jornada Jr ao Pleno)
-Este projeto está em desenvolvimento contínuo, seguindo um roadmap estruturado para aplicar as melhores práticas de mercado:
+🗺️ Roadmap de Evolução 
+- Este projeto está em desenvolvimento contínuo, seguindo um roadmap estruturado para aplicar as melhores práticas de mercado:
 
 [x] Fase 1: Base Profissional (Spring Boot, JPA, Arquitetura MVC, DTOs e Bean Validation).
 
@@ -69,10 +69,3 @@ Este projeto está em desenvolvimento contínuo, seguindo um roadmap estruturado
 
 Desenvolvido com ☕ e dedicação por Davi Silva.
 
-
-### Para enviar para o GitHub:
-Abre o terminal no IntelliJ e cola estes três comandos, um de cada vez:
-```bash
-git add README.md
-git commit -m "docs: adiciona README completo com roadmap"
-git push
