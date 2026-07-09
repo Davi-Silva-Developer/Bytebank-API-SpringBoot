@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 //Criando conta
 @RestController
-@RequestMapping("/contas")
+@RequestMapping("/Criar")
 public class ContaController {
 
 
@@ -34,21 +34,37 @@ public class ContaController {
 
     @PostMapping
     public String abrir(@RequestBody @Valid AbrirContaRequest dados) {
-        //Procurando titular no banco de dados
-        Cliente titular = clienteRepository.findById(dados.clienteId()).orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
 
-        //Selecionando conta corrente ou conta poupança
+
+
+        Cliente titular = clienteRepository.findById(dados.clienteId())
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+
+
+
         Conta novaConta;
-        if (dados.tipoDeConta().equalsIgnoreCase("CC")) {
-            novaConta = new ContaCorrente(titular, dados.numero(), dados.saldoInicial());
 
+        if (dados.tipoDeConta().equalsIgnoreCase("CC")) {
+            System.out.println("🔥 CRIANDO CONTA CORRENTE");
+            novaConta = new ContaCorrente(
+                    titular,
+                    dados.numero(),
+                    dados.saldoInicial()
+            );
         } else {
-            novaConta = new ContaPoupanca(titular, dados.numero(), dados.saldoInicial());
+            System.out.println("🔥 CRIANDO CONTA POUPANÇA");
+            novaConta = new ContaPoupanca(
+                    titular,
+                    dados.numero(),
+                    dados.saldoInicial()
+            );
         }
 
-        //salvando após validação
         contaRepository.save(novaConta);
-        return "Conta " + dados.tipoDeConta() + " aberta com sucesso para " + titular.getNome();
+
+        System.out.println("🔥 CONTA SALVA");
+
+        return "Conta aberta com sucesso";
     }
 
 

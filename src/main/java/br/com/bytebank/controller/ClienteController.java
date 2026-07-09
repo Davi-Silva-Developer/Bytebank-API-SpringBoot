@@ -13,7 +13,7 @@ import java.util.List;
 public class ClienteController {
 
     @RestController
-    @RequestMapping("/api/clientes")
+    @RequestMapping("/api/CLientes")
     public class clienteController {
 
         @Autowired
@@ -34,13 +34,7 @@ public class ClienteController {
             return novoCliente;
         }
 
-
-
-
-
-
-
-
-
     }
+
+
 }

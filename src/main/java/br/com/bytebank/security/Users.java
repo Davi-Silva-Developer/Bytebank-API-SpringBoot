@@ -9,14 +9,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "usuarios")
-@Entity(name = "Usuario")
+@Table
+@Entity(name = "Users")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")
-
-public class Usuario implements UserDetails {
+public class Users implements UserDetails {
 
 	@Id //
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,20 +24,21 @@ public class Usuario implements UserDetails {
 	private String login;
 	private String password;
 
+	
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// Dá a autoridade padrão de usuário para o Spring não travar o acesso
 		return List.of(new SimpleGrantedAuthority("ROLE_USER"));
 	}
-
 	@Override
 	public String getPassword() {
-		return password; // Retorna a variável senha declarada ali em cima
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
-		return login; // Retorna a variável login declarada ali em cima
+		return login;
 	}
 
 	@Override
