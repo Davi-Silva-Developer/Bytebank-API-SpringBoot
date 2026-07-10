@@ -65,18 +65,18 @@ public class ContaServiceTest {
     @Test
     @DisplayName("Deve realizar saque com sucesso quando houver saldo suficiente")
     void deveSacarComSucesso() {
-        // AAA: ARRANGE (Preparar)
+        // ARRANGE (Preparar)
         ContaCorrente contaFake = new ContaCorrente();
         contaFake.setId(1L);
         contaFake.setSaldo(100.0);
 
         when(repository.findById(1L)).thenReturn(Optional.of(contaFake));
 
-        // AAA: ACT (Agir - Tenta sacar 30 de uma conta que tem 100)
+        // ACT (Tenta sacar 30 de uma conta que tem 100)
         service.sacar(1L, 30.0);
 
-        // AAA: ASSERT (Verificar)
-        // O saldo tem que cair para 70 (ou menos, se a sua Service cobrar alguma taxa extra de saque)
+        //ASSERT (Verificar)
+        // O saldo tem que cair para 69.80)
         assertEquals(69.80, contaFake.getSaldo());
         verify(repository).save(contaFake);
     }
@@ -87,12 +87,12 @@ public class ContaServiceTest {
         // AAA: ARRANGE (Preparar)
         ContaCorrente contaFake = new ContaCorrente();
         contaFake.setId(1L);
-        contaFake.setSaldo(10.0); // O cliente só tem R$ 10,00 na conta
+        contaFake.setSaldo(10.0); //O cliente tem R$10,00 na conta
 
         when(repository.findById(1L)).thenReturn(Optional.of(contaFake));
 
-        // AAA: ACT & ASSERT (Agir e Verificar)
-        // Tenta sacar 50 tendo apenas 10. A Service TEM que explodir uma exceção!
+        //ACT & ASSERT (Agir e Verificar)
+        // Tenta sacar 50 tendo 10. A Service TEM que explodir uma exceção!
         assertThrows(RuntimeException.class, () -> {
             service.sacar(1L, 50.0);
         });
