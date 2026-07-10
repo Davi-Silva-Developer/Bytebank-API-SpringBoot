@@ -70,7 +70,7 @@ Este projeto está em desenvolvimento contínuo, seguindo um roadmap estruturado
 
 [x] Fase 2: Tratamento de Erros e Documentação (Implementação de @RestControllerAdvice para erros padronizados e Swagger/OpenAPI para documentação interativa).
 
-[ ] Fase 3: Qualidade de Código (Cobertura de testes automatizados unitários e de integração com JUnit e Mockito).
+[X] Fase 3: Qualidade de Código (Cobertura de testes automatizados unitários e de integração com JUnit e Mockito).
 
 [x] Fase 4: Segurança (Autenticação e Autorização blindadas usando Spring Security, BCrypt e tokens JWT Stateless).
 
