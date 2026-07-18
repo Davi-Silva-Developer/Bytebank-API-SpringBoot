@@ -1,97 +1,55 @@
-# 📝 To-Do List API
+# 🏦 Bytebank API - Spring Boot
 
-> API REST para gestão de tarefas, desenvolvida com **Java e Spring Boot**, com foco em organização em camadas, persistência de dados e boas práticas na construção de APIs REST.
+> Uma API RESTful robusta para um sistema bancário digital, construída com Spring Boot, aplicando boas práticas de arquitetura em camadas, encapsulamento, persistência de dados e segurança corporativa.
 
 ![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.0+-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![Spring Security](https://img.shields.io/badge/Spring_Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
 ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white)
-![Maven](https://img.shields.io/badge/Maven-C71A36?style=for-the-badge&logo=apachemaven&logoColor=white)
 
-##  Sobre o Projeto
+## Sobre o Projeto
 
-Este projeto é uma API REST para gerenciamento de tarefas (to-do list), permitindo que cada usuário crie, liste, atualize e remova suas próprias tarefas. A aplicação foi construída seguindo o padrão de arquitetura em camadas (`Controller`, `Service`, `Repository`), com persistência de dados via JPA/Hibernate e autenticação Basic Auth protegida por criptografia BCrypt.
+Este projeto representa a evolução de um sistema bancário em Java puro para uma **API REST moderna e escalável**. Ele faz a gestão de clientes e contas bancárias (Corrente e Poupança), lidando com operações financeiras críticas através de transações seguras.
 
-##  Tecnologias
+A arquitetura foi desenhada para isolar regras de negócio na camada de `Service`, proteger a entrada de dados com o padrão `DTO` (Data Transfer Object), garantir a integridade da base de dados com o PostgreSQL usando `JPA/Hibernate` e proteger os endpoints com **Spring Security e Tokens JWT**.
+
+## ✅ Funcionalidades
+
+- **Segurança Avançada:** Autenticação e Autorização Stateless. Geração de tokens JWT e criptografia de senhas irreversíveis utilizando BCrypt.
+- **Gestão de Contas:** Abertura de Contas Corrente e Poupança utilizando herança no mapeamento relacional (`@Inheritance(strategy = SINGLE_TABLE)`).
+- **Operações Financeiras:** Depósitos e Saques com aplicação de regras de negócio (ex: taxas exclusivas para Conta Corrente).
+- **Transferências:** Envio de valores entre contas com rollback automático em caso de falha (`@Transactional`).
+- **Validação de Dados:** Filtro rigoroso nas requisições HTTP utilizando Bean Validation (`@NotNull`, `@Positive`) nos DTOs (Records).
+- **Tratamento Global de Erros:** Respostas padronizadas para exceções da API utilizando `@RestControllerAdvice`.
+
+##  Tecnologias e Padrões Utilizados
 
 - **Linguagem:** Java 21
-- **Framework:** Spring Boot (Web MVC, Data JPA)
-- **Persistência:** Hibernate + MySQL
-- **Segurança:** Basic Auth + BCrypt
-- **Outros:** Lombok, Maven
+- **Framework:** Spring Boot (Web, Data JPA, Validation, Security)
+- **Segurança:** Auth0 (Java JWT), BCryptPasswordEncoder
+- **Base de Dados:** PostgreSQL
+- **Ferramentas:** Lombok, Maven, Swagger (OpenAPI)
+- **Arquitetura:** MVC / Layered Architecture / Fail Fast Validation
 
-##  Funcionalidades
+## 📚 Endpoints da API
 
-- Cadastro de usuários
-- Criação de tarefas
-- Listagem de tarefas do usuário autenticado
-- Atualização de tarefas
-- Remoção de tarefas
+Abaixo estão as principais rotas disponíveis para integração. *Nota: Com exceção do `/login` e do `/swagger-ui`, todas as rotas exigem o envio do cabeçalho `Authorization: Bearer <token>`.*
 
-##  Arquitetura e Conceitos Aplicados
-
-- API REST
-- Arquitetura em camadas (Controller, Service, Repository)
-- Persistência com JPA / Hibernate
-- Integração com banco de dados MySQL
-- Autenticação Basic Auth com senhas criptografadas via BCrypt
-- Uso de DTOs para entrada e saída de dados
-
-## ⚙️ Como executar o projeto
-
-### Pré-requisitos
-- Java 21
-- Maven
-- MySQL em execução
-
-### Passos
-
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/Davi-Silva-Developer/To_Do_List.git
-   cd To_Do_List
-   ```
-
-2. Configure o acesso ao banco de dados em `src/main/resources/application.properties`:
-   ```properties
-   spring.datasource.url=jdbc:mysql://localhost:3306/todolist_db
-   spring.datasource.username=SEU_USUARIO
-   spring.datasource.password=SUA_SENHA
-   ```
-
-3. Execute a aplicação:
-   ```bash
-   mvn spring-boot:run
-   ```
-
-A aplicação estará disponível em: `http://localhost:8080`
-
-##  Autenticação
-
-Os endpoints de tarefas exigem autenticação **Basic Auth**:
-
-1. Crie um usuário via `POST /users`.
-2. Envie usuário e senha no header `Authorization` (Basic Auth) em cada requisição às rotas de `/tasks`.
-
-## 📚 Endpoints principais
-
-| Método | Rota | Descrição | Autenticação |
+| Método | Endpoint | Descrição | Corpo da Requisição (JSON) |
 |---|---|---|---|
-| `POST` | `/users` | Cria um novo usuário | Não |
-| `GET` | `/tasks/` | Lista as tarefas do usuário autenticado | Sim |
-| `POST` | `/tasks/` | Cria uma nova tarefa | Sim |
-| `PUT` | `/tasks/{id}` | Atualiza uma tarefa existente | Sim |
-| `DELETE` | `/tasks/{id}` | Remove uma tarefa | Sim |
+| `POST` | `/login` | Autentica o usuário e devolve o Token JWT | `login`, `senha` |
+| `POST` | `/contas` | Abre uma nova conta | `clienteId`, `numero`, `saldoInicial`, `tipoDeConta` ("CC" ou "CP") |
+| `PUT` | `/contas/{id}/depositar` | Deposita um valor | `valor` |
+| `PUT` | `/contas/{id}/sacar` | Saca um valor (aplica taxas) | `valor` |
+| `PUT` | `/contas/{id}/transferir`| Transfere para outra conta | `contaDestinoId`, `valor` |
 
-### Exemplo de requisição — `POST /tasks/`
+### Exemplo de requisição — `POST /login`
 
 ```json
 {
-  "title": "Estudar Spring Boot",
-  "descricao": "Rever anotações de JPA e validações",
-  "hrInicio": "2024-05-10T08:00:00",
-  "hrfim": "2024-05-10T12:00:00",
-  "prioridade": "ALTA"
+  "login": "usuario@email.com",
+  "senha": "minhaSenhaSegura123"
 }
 ```
 
@@ -99,29 +57,54 @@ Os endpoints de tarefas exigem autenticação **Basic Auth**:
 
 ```json
 {
-  "id": 1,
-  "title": "Estudar Spring Boot",
-  "descricao": "Rever anotações de JPA e validações",
-  "hrInicio": "2024-05-10T08:00:00",
-  "hrfim": "2024-05-10T12:00:00",
-  "prioridade": "ALTA",
-  "concluida": false
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
-##  Roadmap de Evolução
+## ⚙️ Como executar o projeto localmente
 
-- [x] Fase 1: CRUD básico de tarefas com Spring Boot e JPA
-- [x] Fase 2: Autenticação Basic Auth com BCrypt
-- [ ] Fase 3: Tratamento global de erros com `@RestControllerAdvice`
-- [ ] Fase 4: Documentação interativa com Swagger/OpenAPI
-- [ ] Fase 5: Testes automatizados com JUnit e Mockito
-- [ ] Fase 6: Migração para autenticação stateless com JWT
+### Pré-requisitos
+- Java 21
+- PostgreSQL em execução
 
-##  Autor
+### Passos
 
-**Davi Silva**
-[LinkedIn](https://www.linkedin.com/in/davi-silva-dev) · [GitHub](https://github.com/Davi-Silva-Developer)
+1. Crie uma base de dados no PostgreSQL (ex: `bytebank_db`).
 
----
-*Projeto iniciado durante um curso de Java com Spring Boot, evoluído com camadas adicionais de autenticação e tratamento de erro.*
+2. Clone este repositório:
+   ```bash
+   git clone https://github.com/Davi-Silva-Developer/Bytebank-API-SpringBoot.git
+   cd Bytebank-API-SpringBoot
+   ```
+
+3. Atualize o ficheiro `src/main/resources/application.properties` com as suas credenciais do PostgreSQL e a chave secreta da API:
+   ```properties
+   spring.datasource.url=jdbc:postgresql://localhost:5432/bytebank_db
+   spring.datasource.username=SEU_USUARIO
+   spring.datasource.password=SUA_SENHA
+
+   api.security.token.secret=SUA_CHAVE_SECRETA_AQUI
+   ```
+
+4. Execute a aplicação através da sua IDE (IntelliJ/Eclipse) ou via Maven:
+   ```bash
+   mvn spring-boot:run
+   ```
+
+O servidor iniciará na porta `8080`.
+
+Acesse a documentação interativa no navegador: `http://localhost:8080/swagger-ui.html`
+
+## 🗺️ Roadmap de Evolução
+
+Este projeto está em desenvolvimento contínuo, seguindo um roadmap estruturado para aplicar as melhores práticas de mercado:
+
+- [x] **Fase 1:** Base Profissional (Spring Boot, JPA, Arquitetura MVC, DTOs e Bean Validation)
+- [x] **Fase 2:** Tratamento de Erros e Documentação (`@RestControllerAdvice` + Swagger/OpenAPI)
+- [x] **Fase 3:** Qualidade de Código (cobertura de testes com JUnit e Mockito)
+- [x] **Fase 4:** Segurança (Spring Security, BCrypt e tokens JWT Stateless)
+- [ ] **Fase 5:** Nuvem e Mensageria (containerização com Docker e simulação de microsserviços com filas Kafka/RabbitMQ)
+
+## 👤 Autor
+
+Desenvolvido com ☕ e dedicação por **Davi Silva**.
