@@ -1,6 +1,7 @@
-package br.com.bytebank.security;
+package br.com.bytebank.service;
 
 
+import br.com.bytebank.model.Users;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;

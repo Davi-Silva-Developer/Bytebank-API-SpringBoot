@@ -4,19 +4,21 @@ package br.com.bytebank.service;
 import br.com.bytebank.model.Conta;
 import br.com.bytebank.repository.ContaRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+
 @Service
+@RequiredArgsConstructor
 public class ContaService {
 
 
-    @Autowired
-    private ContaRepository contaRepository;
+    private final ContaRepository contaRepository;
 
 
     @Transactional
-    public  void depositar(Long id, double valor){
+    public  void depositar(Long id, BigDecimal valor){
         Conta conta = contaRepository.findById(id)
                 .orElseThrow( () -> new IllegalArgumentException("Conta não encontrada!!"));
         conta.depositar(valor);
@@ -26,7 +28,7 @@ public class ContaService {
 
 
     @Transactional
-    public  void sacar(Long id, double valor){
+    public  void sacar(Long id, BigDecimal valor){
 
         Conta conta = contaRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Conta não foi encontrada"));
@@ -41,7 +43,7 @@ public class ContaService {
     }
 
     @Transactional
-    public void transferir(Long idOrigem, Long idDestino, double valor){
+    public void transferir(Long idOrigem, Long idDestino, BigDecimal valor){
 
         Conta contaOrigem = contaRepository.findById(idOrigem)
                 .orElseThrow( ()-> new IllegalArgumentException("Conta não encontrada!!"));
