@@ -2,7 +2,7 @@ package br.com.bytebank.controller;
 
 import br.com.bytebank.model.Cliente;
 import br.com.bytebank.repository.ClienteRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +14,10 @@ public class ClienteController {
 
     @RestController
     @RequestMapping("/api/CLientes")
+    @RequiredArgsConstructor
     public class clienteController {
 
-        @Autowired
-        private ClienteRepository repository;
+        private final ClienteRepository repository;
         // Rota para LISTAR todos os clientes
         @GetMapping
         public List<Cliente> listar(){
@@ -27,8 +27,7 @@ public class ClienteController {
         // Rota para CRIAR um novo cliente
         @PostMapping
         public Cliente criar(@RequestBody Cliente novoCliente){
-            System.out.println("NOME RECEBIDO: " + novoCliente.getNome());
-            System.out.println("CPF RECEBIDO: " + novoCliente.getCpf());
+
             repository.save(novoCliente);
 
             return novoCliente;
