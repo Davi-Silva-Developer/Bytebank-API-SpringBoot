@@ -1,32 +1,20 @@
 
-# ETAPA 1: Compilação (Build)
-
-#  imagem oficial do Java 21 com o JDK para compilar o código
+# Build stage
 FROM eclipse-temurin:21-jdk-jammy AS build
-
-# Define a pasta de trabalho dentro do contêiner
 WORKDIR /app
 
-# Copia todos os arquivos do projeto para dentro do contêiner
-COPY . .
+# Copy maven wrapper and pom to cache dependencies
+COPY .mvn/ .mvn
+COPY mvnw pom.xml ./
+RUN ./mvnw dependency:go-offline
 
-# Executa o Maven para compilar o projeto e gerar o .jar (pulando os testes para acelerar)
+# Copy source code and build
+COPY src ./src
 RUN ./mvnw clean package -DskipTests
 
-
-
-#Execução (Run)
-
-#imagem apenas com o JRE (sem ferramentas de compilação)
+# Run stage
 FROM eclipse-temurin:21-jre-jammy
-
 WORKDIR /app
-
-# Copia o arquivo .jar gerado  para esta nova imagem limpa
 COPY --from=build /app/target/*.jar app.jar
-
-# Informa que a aplicação roda na porta 8080
 EXPOSE 8080
-
-# Comando para iniciar a API
 ENTRYPOINT ["java", "-jar", "app.jar"]

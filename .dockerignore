@@ -1,0 +1,26 @@
+target/
+!.jar
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+*.swp
+*.swo
+
+# Maven
+.mvn/wrapper/maven-wrapper.jar
+
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yaml
+.env
+
+# Git
+.git
+.gitignore
