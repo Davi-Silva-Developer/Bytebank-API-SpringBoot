@@ -11,25 +11,23 @@ import br.com.bytebank.repository.ClienteRepository;
 import br.com.bytebank.repository.ContaRepository;
 import br.com.bytebank.service.ContaService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
 //Criando conta
 @RestController
-@RequestMapping("/Criar")
+@RequestMapping("/contas")
+@RequiredArgsConstructor
 public class ContaController {
 
 
-    @Autowired
-    private ContaRepository contaRepository;
+    private final ContaRepository contaRepository;
 
-    @Autowired
-    private ContaService contaService;
+    private final ContaService contaService;
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
 
 
     @PostMapping
@@ -45,14 +43,13 @@ public class ContaController {
         Conta novaConta;
 
         if (dados.tipoDeConta().equalsIgnoreCase("CC")) {
-            System.out.println("🔥 CRIANDO CONTA CORRENTE");
+
             novaConta = new ContaCorrente(
                     titular,
                     dados.numero(),
                     dados.saldoInicial()
             );
         } else {
-            System.out.println("🔥 CRIANDO CONTA POUPANÇA");
             novaConta = new ContaPoupanca(
                     titular,
                     dados.numero(),
@@ -62,7 +59,6 @@ public class ContaController {
 
         contaRepository.save(novaConta);
 
-        System.out.println("🔥 CONTA SALVA");
 
         return "Conta aberta com sucesso";
     }

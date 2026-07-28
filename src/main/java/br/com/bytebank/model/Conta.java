@@ -4,6 +4,8 @@ package br.com.bytebank.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @AllArgsConstructor
@@ -15,9 +17,9 @@ public abstract class Conta {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    protected double saldo;
+    protected BigDecimal saldo;
     private int numero;
-    public Conta(double saldo,int numero, Cliente Titular){
+    public Conta(BigDecimal saldo, int numero, Cliente Titular){
         this.saldo = saldo;
         this.numero = numero;
         this.titular = Titular;
@@ -40,12 +42,12 @@ public abstract class Conta {
 
 
     //---DEPOSITAR VALOR
-    public void depositar(double valor){
-        this.saldo += valor;
+    public void depositar(BigDecimal valor){
+        this.saldo = this.saldo.add(valor);
     }
 
     //--- TRANFERIR VALOR -----
-    public boolean transferir(double valor, Conta destino){
+    public boolean transferir(BigDecimal valor, Conta destino){
         if (this.sacar(valor)) {
 
             destino.depositar(valor);
@@ -59,7 +61,7 @@ public abstract class Conta {
 
 
     //verificando se existe saldo para transferir para a outra conta
-    public abstract boolean sacar(double valor);
+    public abstract boolean sacar(BigDecimal valor);
 
 
 
